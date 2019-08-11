@@ -10,20 +10,19 @@
             <span class="complete-box"></span> = Complete
         </span>
         </div>
-        <div class="todos">
-            <draggable
+        <draggable v-model="todosList" class="todos">
+            <div
                     v-for="todo in allTodos"
                     :key="todo.id"
                     v-bind:class="{'is-complete':todo.completed}"
                     class="todo"
-                    v-model="todosList"
             >
                 <Todo v-bind:todo="todo"/>
                 <i class="fas fa-check-square completed" @click="changeCompleteness(todo)"></i>
                 <i class="far fa-check-square incompleted" @click="changeCompleteness(todo)"></i>
                 <i class="fas fa-trash-alt delete" @click="deleteTodo(todo.id)"></i>
-            </draggable>
-        </div>
+            </div>
+        </draggable>
     </div>
 </template>
 <script>
@@ -52,11 +51,9 @@
             ...mapGetters(['allTodos']),
             todosList: {
                 get() {
-                    console.log('*1');
                     return this.allTodos;
                 },
                 set(value) {
-                    console.log('*2');
                     this.$store.commit('updateList', value)
                 }
             }
@@ -136,11 +133,5 @@
 
     .completed {
         display: none;
-    }
-
-    @media (max-width: 500px) {
-        .todos {
-            grid-template-columns: 1fr;
-        }
     }
 </style>
