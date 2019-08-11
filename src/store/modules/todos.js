@@ -48,7 +48,8 @@ const mutations = {
             state.todos[index].completed = !state.todos[index].completed;
             // state.todos.splice(index, 1, updatedTodo);
         }
-    }
+    },
+    updateList: (state, updatedTodos) => state.todos = updatedTodos
 };
 
 export default {

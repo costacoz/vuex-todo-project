@@ -11,27 +11,32 @@
         </span>
         </div>
         <div class="todos">
-            <div
+            <draggable
                     v-for="todo in allTodos"
                     :key="todo.id"
                     v-bind:class="{'is-complete':todo.completed}"
                     class="todo"
+                    v-model="todosList"
             >
                 <Todo v-bind:todo="todo"/>
                 <i class="fas fa-check-square completed" @click="changeCompleteness(todo)"></i>
                 <i class="far fa-check-square incompleted" @click="changeCompleteness(todo)"></i>
                 <i class="fas fa-trash-alt delete" @click="deleteTodo(todo.id)"></i>
-            </div>
+            </draggable>
         </div>
     </div>
 </template>
 <script>
     import {mapGetters, mapActions} from 'vuex';
     import Todo from "@/components/Todo";
+    import draggable from 'vuedraggable';
 
     export default {
         name: "Todos",
-        components: {Todo},
+        components: {
+            Todo,
+            draggable
+        },
         methods: {
             ...mapActions(['fetchTodos', 'deleteTodo', 'updateTodo']),
             changeCompleteness(todo){
@@ -43,7 +48,20 @@
                 this.updateTodo(updatedTodo);
             },
         },
-        computed: mapGetters(['allTodos']),
+        computed: {
+            ...mapGetters(['allTodos']),
+            todosList: {
+                get() {
+                    console.log('*1');
+                    return this.allTodos;
+                },
+                set(value) {
+                    console.log('*2');
+                    this.$store.commit('updateList', value)
+                }
+            }
+
+        },
         created() {
             this.fetchTodos()
         }
